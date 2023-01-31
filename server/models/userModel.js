@@ -23,6 +23,13 @@ const schema = new db.Schema(
             minlength: 5,
             trim: true
         },
+        role: {
+            type: String,
+            required: true,
+            maxlength: 20,
+            minlength: 1,
+            trim: true
+        },
 
     }
 )

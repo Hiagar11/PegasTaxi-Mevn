@@ -3,16 +3,18 @@
 </template>
 
 <script>
-import statisticsComponent from "@/components/adminStatisticsComponent";
+import adminStatisticsComponent from "@/components/adminStatisticsComponent";
+import adminRedactorDriversComponent from "@/components/adminRedactorDriversComponent";
 export default {
   name: "AdminMain",
   components: {
-    statisticsComponent
+    adminStatisticsComponent,
+    adminRedactorDriversComponent
   },
   props: {
     selectedComponent: {
       type: String,
-      default: "statisticsComponent"
+      default: "adminStatisticsComponent"
     }
   },
 

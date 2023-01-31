@@ -4,7 +4,7 @@
     <h4>Выберите дату, чтобы просмотреть статистику.</h4>
   </div>
   <div class="row">
-    <div class="col mt-3">
+    <div class="col my-3">
       <form action="" class="form-control d-flex flex-wrap" @submit.prevent="getModulTrips">
         <input type="number"
                name="year"
@@ -35,6 +35,28 @@
       </form>
     </div>
   </div>
+  <transition>
+    <div class="row m-0 p-0" v-if="tripsInfo">
+      <div class="col-12 p-2 pe-5 bg-info text-end">
+        Общее количество поездок за месяц: {{tripsInfo.totalTrips}}
+      </div>
+      <div class="col-12 p-2 pe-5 bg-info text-end">
+        Общая сумма: <b>{{tripsInfo.totalMoney}}</b>
+      </div>
+      <div class="row">
+        <div class="col-3 p-2 py-5 m-auto mt-2
+         d-flex
+          text-center flex-column rounded-2"
+        v-for="(trips, index) of tripsInfo.statsTripsMoney"
+             :key="index"
+             :style="{border: '5px solid ' + trips.color}"
+        >
+          <span>Сумма: {{trips.money}}</span>
+          <span>Количество поездок: {{trips.length}}</span>
+        </div>
+      </div>
+    </div>
+  </transition>
 </div>
 </template>
 
@@ -46,7 +68,8 @@ export default {
   data() {
     return {
       month: '',
-      year: ''
+      year: '',
+      tripsInfo: null
     }
   },
   computed: {
@@ -66,8 +89,7 @@ export default {
   },
   methods: {
     async getModulTrips() {
-     let trips = await getTripsMonth(`${this.year}-${fixMonth(this.month)}-01`);
-      console.log(trips)
+     this.tripsInfo = await getTripsMonth(`${this.year}-${fixMonth(this.month)}-01`);
     }
   },
   mounted() {
@@ -77,5 +99,13 @@ export default {
 </script>
 
 <style scoped>
+.v-enter-active,
+.v-leave-active {
+  transition: opacity 0.5s ease;
+}
 
+.v-enter-from,
+.v-leave-to {
+  opacity: 0;
+}
 </style>

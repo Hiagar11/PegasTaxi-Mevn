@@ -132,6 +132,8 @@
 <script>
 
 import {actualDate} from "../../store/dateStore";
+import {colorsStore} from "../../store/filterColorStore";
+
 export default {
   name: "TripsForm",
   props: {
@@ -146,14 +148,14 @@ export default {
   },
   data() {
     return {
-      colors: ['red', 'green', 'blue', 'yellow', 'black'],
+      colors: [],
       selectedColor: "green",
       isOpenList: false,
     }
   },
   emits: ['closing', 'setTrip', 'updateTrip'],
   methods: {
-      toReloadHandler(e) {
+    toReloadHandler(e) {
       let data = Object.fromEntries(new FormData(e.target));
       if (this.method === 'post') {
         this.$emit('setTrip', data);
@@ -162,14 +164,21 @@ export default {
       }
       this.$emit('closing')
     },
+    async takeColors() {
+      let colors = await colorsStore();
+      this.colors = colors.map(item => {return item.color});
+    }
   },
   computed: {
     fromActualDate() {
       return actualDate.value
     },
   },
-  mounted() {
+   mounted() {
     this.selectedColor = this.item.color
+     this.takeColors()
+  },
+   created() {
   }
 }
 </script>

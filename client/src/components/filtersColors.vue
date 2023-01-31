@@ -31,7 +31,7 @@ export default {
   },
   methods: {
     async takeColors() {
-      this.colors = await colorsStore()
+      this.colors =await colorsStore()
     },
   },
   computed: {

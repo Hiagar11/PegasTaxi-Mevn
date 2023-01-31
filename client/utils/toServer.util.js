@@ -51,7 +51,7 @@ export const takeColors = async () => {
 export const findUser = async (login, password) => {
     try{
         return await axios({
-            url: `http://localhost:3000/users`,
+            url: `http://localhost:3000/login`,
             method: 'post',
             data: {login, password}
         });
@@ -72,6 +72,61 @@ export const getTripsMonth = async(str) => {
             },
             url: `http://localhost:3000/trips?date=${str}`,
             method: 'get',
+        }).then(res => res.data)
+    } catch (e) {
+        if (e.response.status === 403) {
+            setUserToken('')
+            return []
+        } else {
+            throw new Error(e)
+        }
+    }
+}
+export const usersFromDb = async() => {
+    try {
+        return await axios({
+            headers: {
+                authorization: `Bearer ${userToken.value}`
+            },
+            url: `http://localhost:3000/users`,
+            method: 'get',
+        }).then(res => res.data)
+    } catch (e) {
+        if (e.response.status === 403) {
+            setUserToken('')
+            return []
+        } else {
+            throw new Error(e)
+        }
+    }
+}
+export const getUser = async(name) => {
+    try {
+        return await axios({
+            headers: {
+                authorization: `Bearer ${userToken.value}`
+            },
+            url: `http://localhost:3000/users/${name}`,
+            method: 'get',
+        }).then(res => res.data)
+    } catch (e) {
+        if (e.response.status === 403) {
+            setUserToken('')
+            return []
+        } else {
+            throw new Error(e)
+        }
+    }
+}
+export const setUser = async(user) => {
+    try {
+        return await axios({
+            headers: {
+                authorization: `Bearer ${userToken.value}`
+            },
+            url: `http://localhost:3000/users/`,
+            method: 'post',
+            data: user,
         }).then(res => res.data)
     } catch (e) {
         if (e.response.status === 403) {

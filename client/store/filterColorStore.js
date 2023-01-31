@@ -1,10 +1,11 @@
 import {ref} from 'vue'
 import {takeColors} from "../utils/toServer.util";
 
+
 export let colorsStore = async () => {
     let {data} = await takeColors()
-    return ref(data)
-};
+    return data
+}
 
 export let noDisplayColor = ref([]);
 
