@@ -29,9 +29,11 @@
 <script>
 import CarInfo from 'vue-material-design-icons/CarInfo'
 import HeadCog from 'vue-material-design-icons/HeadCog'
-import {User} from "../../store/user.store";
+
 
 import AccountArrowRightOutline from 'vue-material-design-icons/AccountArrowRightOutline'
+import {mapStores} from "pinia";
+import {useTokenStore} from "../../store/token.store";
 
 export default {
   name: "TheHeader",
@@ -41,8 +43,9 @@ export default {
     AccountArrowRightOutline
   },
   computed: {
+    ...mapStores(useTokenStore),
     user() {
-      return User.value
+      return this.tokenStore.user
     }
   },
   methods: {

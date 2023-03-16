@@ -5,11 +5,13 @@
 <script>
 import adminStatisticsComponent from "@/components/adminStatisticsComponent";
 import adminRedactorDriversComponent from "@/components/adminRedactorDriversComponent";
+import adminRedactorColorsComponent from "@/components/adminRedactorDirectionComponent";
 export default {
   name: "AdminMain",
   components: {
     adminStatisticsComponent,
-    adminRedactorDriversComponent
+    adminRedactorDriversComponent,
+    adminRedactorColorsComponent
   },
   props: {
     selectedComponent: {
@@ -17,7 +19,6 @@ export default {
       default: "adminStatisticsComponent"
     }
   },
-
 }
 </script>
 

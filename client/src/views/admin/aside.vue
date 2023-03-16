@@ -6,7 +6,7 @@
     <input type="radio" class="btn-check" name="vbtn-radio" id="vbtn-radio2" autocomplete="off">
     <label class="btn btn-outline-dark" @click="selectNameComponent('adminRedactorDriversComponent')" for="vbtn-radio2">Пользователи</label>
     <input type="radio" class="btn-check" name="vbtn-radio" id="vbtn-radio3" autocomplete="off">
-    <label class="btn btn-outline-dark" @click="selectNameComponent('statisticsComponent')" for="vbtn-radio3">Radio 3</label>
+    <label class="btn btn-outline-dark" @click="selectNameComponent('adminRedactorColorsComponent')" for="vbtn-radio3">Направления</label>
   </div>
 </div>
 

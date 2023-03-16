@@ -10,14 +10,24 @@
     </form-users-component>
     <div class="col-4 border p-2 m-2">
       <h5 class="text-center">Список пользователей:</h5>
-      <ul class="list-unstyled overflow-scroll" v-if="users.length">
+      <ul class="list-unstyled overflow-auto" v-if="users.length">
         <li
             v-for="user of users"
             :key="user"
-            class="user text-center m-2 p-1"
-            @click="selectUser(user)"
+            class="user d-flex align-items-center justify-content-center m-2 p-1"
+            @click="selectUser(user.name)"
         >
-          {{user}}
+          <span class="ms-3">
+            <account-cowboy-hat-outline v-if="user.geo" :style="{color:getColor(user.geo), opacity: 0.5}" />
+          </span>
+          <span class="ms-2">
+            {{ user.name }}
+          </span>
+          <button class="ms-auto me-3 btn"
+                  @click.stop="deleteUser(user._id)"
+          >
+            <account-remove style="color: darkred"/>
+          </button>
         </li>
       </ul>
       <div class="d-flex justify-content-center" v-else>
@@ -32,10 +42,17 @@
 
 <script>
 import formUsersComponent from "@/components/formUsersComponent";
-import {usersFromDb, getUser} from "../../utils/toServer.util";
+import AccountRemove from 'vue-material-design-icons/AccountRemove'
+import {mapStores} from "pinia";
+import {useUserStore} from "../../store/users.store";
+import {useDirectionStore} from "../../store/directions.store";
+import AccountCowboyHatOutline from 'vue-material-design-icons/AccountCowboyHatOutline'
+
 export default {
   components: {
-    formUsersComponent
+    formUsersComponent,
+    AccountRemove,
+    AccountCowboyHatOutline
   },
   data() {
     return {
@@ -44,15 +61,27 @@ export default {
     }
   },
   name: "adminRedactorDriversComponent",
+  computed: {
+    ...mapStores(useUserStore, useDirectionStore)
+  },
   methods: {
-    async takeUsers() {
-      this.users = await usersFromDb();
+    takeUsers() {
+      this.users = this.userStore.getUsers;
     },
-    async selectUser(name) {
-      this.user =await getUser(name)
+    selectUser(name) {
+      this.user = this.userStore.getUser(name)[0];
     },
     cleanForm() {
       this.user = {}
+    },
+    async deleteUser(_id) {
+      if (confirm('Вы уверены, что хотите удалить пользователя?')) {
+        const res = await this.userStore.deleteUsersToStore(_id)
+        alert(res.msg)
+      }
+    },
+    getColor(_id) {
+      return this.directionStore.getColorByIdDirection(_id);
     }
   },
   mounted() {
@@ -64,7 +93,7 @@ export default {
 <style scoped lang="scss">
 .user {
   &:hover {
-    background-color: gray;
+    background-color: rgba(1,1,1,0.1);
     cursor: pointer;
   }
 }

@@ -5,14 +5,14 @@ const schema = new db.Schema(
         name: {
             type: String,
             required: true,
-            maxlength: 255,
+            maxlength: 20,
             minlength: 2,
             trim: true
         },
         login: {
             type: String,
             required: true,
-            maxlength: 255,
+            maxlength: 20,
             minlength: 2,
             trim: true
         },
@@ -30,6 +30,12 @@ const schema = new db.Schema(
             minlength: 1,
             trim: true
         },
+        geo: {
+            type: String,
+            maxlength: 30,
+            minlength: 0,
+            trim: true
+        }
 
     }
 )

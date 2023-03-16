@@ -62,7 +62,7 @@
 
 <script>
 import {fixMonth, getCurrentMonthRus} from "../../utils/date.util";
-import {getTripsMonth} from "../../utils/toServer.util";
+import {getTripsMonth} from "../../utils/trip.toServer";
 export default {
   name: "adminStatisticsComponent",
   data() {

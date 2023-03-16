@@ -43,8 +43,9 @@
 </template>
 
 <script>
-import {findUser} from "../../utils/toServer.util";
-import {setUserData, setUserToken} from "../../store/user.store";
+import {findUser} from "../../utils/user.toServer";
+import {useTokenStore} from "../../store/token.store";
+import {mapStores} from "pinia";
 
 export default {
   name: "loginView",
@@ -56,17 +57,20 @@ export default {
       inValid: false,
     }
   },
+  computed: {
+    ...mapStores(useTokenStore)
+  },
   methods: {
     async checkAuth() {
       let response = await findUser(this.login, this.password);
       if (response.data.token) {
         let token = response.data.token;
         let user = response.data.user;
-        setUserToken(token);
-        setUserData(user);
+        this.tokenStore.setUserToken(token);
+        this.tokenStore.setUserData(user);
         if (this.save) {
           window.localStorage.setItem('token', token);
-          window.localStorage.setItem('user', JSON.stringify(user));
+          window.localStorage.setItem('userName', JSON.stringify(user));
         }
         this.$router.push('/')
       } else {

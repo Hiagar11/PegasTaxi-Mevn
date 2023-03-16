@@ -33,8 +33,8 @@ import arrowLeftBold from 'vue-material-design-icons/ArrowLeftBold'
 import arrowRightBold from 'vue-material-design-icons/ArrowRightBold'
 import calendarComponentTable from './calendarComponentTable'
 import {fixDay, fixMonth, getCurrentMonthRus} from "../../utils/date.util";
-import {setActualDate, setActualMonth} from "../../store/dateStore";
-import {actualDate} from "../../store/dateStore";
+import {mapStores} from 'pinia'
+import {useDateStore} from "../../store/date.store";
 
 export default {
   name: 'calendarComponent',
@@ -51,26 +51,25 @@ export default {
   methods: {
     setMonth(dir) {
       this.selectedDay = 1;
-      setActualMonth(dir)
+      this.dateStore.setActualMonth(dir)
     },
     createFullDate(day) {
       this.selectedDay = day
-      setActualDate(`${this.currYear}-${this.currMonth}-${fixDay(day)}` )
+      this.dateStore.setActualDate(`${this.currYear}-${this.currMonth}-${fixDay(day)}` )
     }
   },
   computed: {
+    ...mapStores(useDateStore),
     getMonthName() {
       return getCurrentMonthRus[+this.currMonth]
     },
     currMonth() {
-      return fixMonth(+actualDate.value.split('-')[1])
+      return fixMonth(+this.dateStore.actualDate.split('-')[1])
     },
     currYear() {
-      return +actualDate.value.split('-')[0]
+      return +this.dateStore.actualDate.split('-')[0]
     }
   },
-  mounted() {
-  }
 }
 </script>
 

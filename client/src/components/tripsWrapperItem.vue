@@ -20,22 +20,21 @@
       {{ item.directionTo }}
   </span></div>
 
-    <div class="col-2 d-flex"
-         v-if="item.color !== 'red'"
-    >
+    <div class="col-2 d-flex">
       <span class="m-auto driverFrom" v-if="item.driverFrom !== ''">
-         {{ item.driverFrom }}
+                 {{ checkingInfoDriver(item.color, item.driverFrom, 'driverFrom').name }}
+          <account-remove-outline v-if="checkingInfoDriver(item.color, item.driverFrom, 'driverFrom').isDeleted"/>
       </span>
-      <account-question-outline :style="{color: 'darkblue'}" class="m-auto" v-else/>
+
     </div>
     <div
-        class="col-2 d-flex"
-        :class="{'col-4': item.color === 'red'}"
-    >
+        class="col-2 d-flex">
    <span class="m-auto driverFrom" v-if="item.driverTo !== ''">
-         {{ item.driverTo }}
+            {{ checkingInfoDriver(item.color, item.driverTo, 'driverTo').name }}
+          <account-remove-outline v-if="checkingInfoDriver(item.color, item.driverTo, 'driverTo').isDeleted"/>
       </span>
-      <account-question-outline :style="{color: item.color === 'red' ? 'darkred' : 'darkgreen'}" class="m-auto" v-else/></div>
+
+    </div>
 
     <div class="col-1 d-flex">
     <span class="m-auto comments w-100 h-50">
@@ -51,7 +50,10 @@
 
 <script>
 import arrowUpDownBold from 'vue-material-design-icons/ArrowUpDownBoldOutline'
-import accountQuestionOutline from 'vue-material-design-icons/AccountQuestionOutline'
+import AccountRemoveOutline from 'vue-material-design-icons/AccountRemoveOutline'
+import {mapStores} from "pinia";
+import {useUserStore} from "../../store/users.store";
+import {useDirectionStore} from "../../store/directions.store";
 
 export default {
   name: "TripsItem",
@@ -61,9 +63,25 @@ export default {
       type: Object,
     },
   },
+  computed:{
+    ...mapStores(useUserStore, useDirectionStore)
+  },
+  methods: {
+    checkingInfoDriver(color, _id, property) {
+     const direction = this.directionStore.getDirectionInfo(color);
+     const driver = direction[property].filter(item => item._id === _id);
+      if(driver.length) {
+        return {name: driver[0].name, isDeleted: false}
+      } else {
+        return {name: this.userStore.getUserNameById(_id), isDeleted: true}
+      }
+    },
+
+
+  },
   components: {
     arrowUpDownBold,
-    accountQuestionOutline
+    AccountRemoveOutline
   },
   emits: ['closing']
 }

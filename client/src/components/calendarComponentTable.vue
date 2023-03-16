@@ -36,7 +36,9 @@ import {
   getWeekNames
 } from "../../utils/date.util";
 import {getRange} from "../../utils/number.util";
-import {dateCurrent} from "../../store/dateStore";
+import {mapStores} from "pinia";
+import {useDateStore} from "../../store/date.store";
+
 
 export default {
   name: 'calendarComponentTable',
@@ -81,11 +83,12 @@ export default {
     }
   },
   computed: {
+    ...mapStores(useDateStore),
     currentMonth() {
-      return +dateCurrent.value.split('-')[1]
+      return +this.dateStore.dateCurrent.split('-')[1]
     },
     currentYear() {
-      return +dateCurrent.value.split('-')[0]
+      return +this.dateStore.dateCurrent.split('-')[0]
     },
     getNamesWeek() {
       return getWeekNames

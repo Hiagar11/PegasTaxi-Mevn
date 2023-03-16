@@ -20,9 +20,8 @@
     >
       <form-component
           :item="{}"
-          :method="'post'"
+          @addTrip="addTrip"
           @closing="closePopup"
-          @setTrip="setTrip"
       >
 
         <template #btnSave>
@@ -52,7 +51,7 @@ export default {
       isOpen: false
     }
   },
-  emits: ['setTrip'],
+  emits: ['addTrip',],
   components: {
     CarClock,
     CarArrowRight,
@@ -63,8 +62,8 @@ export default {
     closePopup() {
       this.isOpen = false
     },
-    setTrip(trip) {
-      this.$emit('setTrip', trip)
+    addTrip(trip) {
+      this.$emit('addTrip', trip)
     }
   },
 

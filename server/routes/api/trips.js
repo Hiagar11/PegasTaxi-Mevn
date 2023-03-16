@@ -7,7 +7,7 @@ const authChecking = require('../../middlewares/auth')
 router.get('/', authChecking, async (req, res) => {
     try {
         let TripModel = connectModel(req.query.date);
-        let ColorModel = require('../../models/colorsTripsModel');
+        let ColorModel = require('../../models/directionsModel');
 
         let trips =await TripModel.find({}).exec();
         let colors = await ColorModel.find({}).exec();
@@ -40,16 +40,16 @@ router.post('/', async ({body}, res) => {
     res.send(newTrip)
 })
 router.put('/', async ({body}, res) => {
-    let TripModel = connectModel(body.date);
+    let TripModel = connectModel(body.date)
 
-    let trip = await TripModel.findByIdAndUpdate(body.id, body, {new: true});
-    res.send(trip)
+    let trip = await TripModel.findByIdAndUpdate(body._id, body, {new: true});
+    res.send({msg: 'ok', status:200});
 })
 router.delete('/', async ({body}, res) => {
     let TripModel = connectModel(body.date);
 
-    await TripModel.findByIdAndDelete(body.id);
-    res.send('ok')
+    await TripModel.findByIdAndDelete(body._id);
+    res.send({msg: 'ok', status:200})
 })
 
 

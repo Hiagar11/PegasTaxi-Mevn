@@ -1,6 +1,6 @@
 <template>
   <div class="container-fluid">
-    <div class="row">
+    <div v-if="isLoadStores" class="row ">
       <aside class="col-3 aside border-end border-dark">
         <router-view name="aside"
                      @selectComponent="selectComponent"
@@ -24,12 +24,19 @@
         </div>
       </div>
     </div>
+    <div class="row justify-content-center mt-5" v-else>
+      <div class="spinner-grow text-success" role="status">
+        <span class="visually-hidden">Loading...</span>
+      </div>
+    </div>
   </div>
 </template>
 
 <script>
 import navigationLinks from "@/components/navigationLinks";
-import {setUserToken} from "../../store/user.store";
+import {useDirectionStore} from "../../store/directions.store";
+import {mapStores} from "pinia";
+import {useUserStore} from "../../store/users.store";
 
 export default {
   name: "layoutComponent",
@@ -38,18 +45,34 @@ export default {
   },
   data() {
     return{
-      selectedComponent: undefined
+      selectedComponent: undefined,
+      isLoadStores: false,
     }
+  },
+  computed: {
+    ...mapStores(useDirectionStore, useUserStore)
   },
   methods: {
     logOut() {
       window.localStorage.clear();
-      this.$router.push('/login')
-      setUserToken("")
+      this.tokenStore.setUserToken("");
+      this.$router.push('/login');
     },
     selectComponent(name) {
       this.selectedComponent = name
+    },
+    async loadStores() {
+      await this.directionStore.loadDirectionsFromDB()
+      await this.userStore.loadUsersFromDB()
+      return true
     }
+  },
+  mounted() {
+   this.loadStores().then(res => {
+     if (res) {
+       this.isLoadStores = true;
+     }
+   })
   }
 }
 </script>
@@ -64,7 +87,7 @@ nav {
 }
 
 main {
-  max-height: 93vh;
+  min-height: 93vh;
 }
 
 </style>

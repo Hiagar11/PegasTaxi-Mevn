@@ -1,16 +1,15 @@
 import {createRouter, createWebHistory} from 'vue-router'
 import layout from "@/views/layout";
 import loginView from "@/views/loginView";
-import {userToken} from "../../store/user.store";
-
-
+import {useTokenStore} from "../../store/token.store";
 
 const routes = [
     {
         path: '/',
         component: layout,
         beforeEnter: (to, from, next) => {
-            if (userToken.value === null) {
+            const token = useTokenStore();
+            if (token.userToken === null) {
                 next({name: 'login'})
             } else next()
         },
@@ -28,7 +27,8 @@ const routes = [
         path: '/admin',
         component: layout,
         beforeEnter: (to, from, next) => {
-            if (userToken.value === null) {
+            const token = useTokenStore();
+            if (token.userToken === null) {
                 next({name: 'login'})
             } else next()
         },

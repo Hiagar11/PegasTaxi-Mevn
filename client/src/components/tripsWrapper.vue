@@ -4,10 +4,8 @@
        @click.right.prevent="toggleChangeComponent">
       <component
           :item="item"
-          :method="'put'"
           :is="currentComponent"
           @closing="closing"
-          @updateTrip="updateTrip"
       >
         <template #btnDelete>
 
@@ -16,7 +14,10 @@
                 class="delete btn btn-danger"
                 @click="deleteEmit(item._id)"
             >
-              <delete-btn></delete-btn>
+              <delete-btn v-if="!spinner"></delete-btn>
+              <div class="spinner-border" role="status" v-else>
+                <span class="visually-hidden">Loading...</span>
+              </div>
             </button>
 
         </template>
@@ -44,9 +45,12 @@ export default {
     },
     index: {
       type: Number,
+    },
+    spinner: {
+      type: Boolean,
     }
   },
-  emits: ['updateTrip', 'deleteOne', 'closing'],
+  emits: ['deleteOne', 'closing'],
   data() {
     return {
       isToggle: true,
@@ -73,11 +77,7 @@ export default {
     },
     deleteEmit(id) {
       this.$emit('deleteOne', id);
-      this.$emit('closing');
     },
-    updateTrip(trip) {
-      this.$emit('updateTrip', trip)
-    }
   }
 }
 </script>

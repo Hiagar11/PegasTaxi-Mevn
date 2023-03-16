@@ -1,7 +1,7 @@
 <template>
   <div class="d-flex flex-column m-3">
     <div class="size mb-2 form-check"
-         v-for="item of colors"
+         v-for="item of directionStore.directions"
          :key="item._id"
     >
       <input class="form-check-input"
@@ -10,7 +10,7 @@
              type="checkbox"
              :style="{outline:`1px solid ${item.color}`}"
              :id="item._id">
-      <label class="form-check-label" :for="item._id">Убрать из {{ item.description }}</label>
+      <label class="form-check-label" :for="item._id">Убрать {{ item.title }}</label>
     </div>
   </div>
 
@@ -18,30 +18,22 @@
 </template>
 
 <script>
-import {colorsStore, setNoDisplayColor} from "../../store/filterColorStore";
-
+import {mapStores} from "pinia";
+import {useDirectionStore} from "../../store/directions.store";
 
 export default {
   name: "filtersColors",
   data() {
     return {
       inputsValue: [],
-      colors: [],
     }
   },
-  methods: {
-    async takeColors() {
-      this.colors =await colorsStore()
-    },
-  },
   computed: {
-  },
-  mounted() {
-    this.takeColors()
+    ...mapStores(useDirectionStore)
   },
   watch: {
     inputsValue(v) {
-      setNoDisplayColor(v)
+      this.directionStore.setNoDisplayColor(v)
     }
   }
 }

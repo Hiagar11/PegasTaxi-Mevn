@@ -30,21 +30,17 @@ const schema = new db.Schema(
         },
         driverFrom: {
             type: String,
-            maxlength: 20,
-            minlength: 0,
             trim: true
         },
         driverTo: {
             type: String,
-            maxlength: 20,
-            minlength: 0,
             trim: true
         },
         money: {
             type: Number,
             require: true,
             maxlength: 20,
-            minlength: 2,
+            minlength: 0,
             trim: true
         },
         comment: {
@@ -59,7 +55,7 @@ const schema = new db.Schema(
         },
         date: {
             type: Date,
-            maxlength: 10,
+            maxlength: 20,
             trim: true
         }
     }
